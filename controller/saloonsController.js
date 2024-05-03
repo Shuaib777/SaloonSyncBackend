@@ -29,12 +29,13 @@ exports.readSaloons = async (req, res) => {
 
     console.log(queryObj);
 
-    let saloons = [];
+    let filter = {};
 
-    if (queryObj.price)
-      saloons = await Saloons.find({
-        "menu.menuItems.price": queryObj.price,
-      });
+    if (queryObj.price) filter[`menu.menuItems.price`] = queryObj.price;
+
+    if (queryObj.category) filter["category"] = queryObj.category;
+
+    const saloons = await Saloons.find(filter);
 
     res.status(200).json(saloons);
   } catch (err) {
